@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>Acme Company Profits</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <style>
+    </style>
+  </head>
+  <body>
+    <div id='app'></div>
+    <script type='text/babel'>
+      //https://www.acme-api.com/api/companies
+      //https://www.acme-api.com/api/companies/:id/companyProfits
+      const App = () => {
+        return (
+          <h1>Start Building</h1>
+        );
+      }
+
+      let root = ReactDOM.createRoot(document.querySelector('#app'));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
