@@ -1,26 +1,92 @@
 <html>
-  <head>
-    <title>Acme Company Profits</title>
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
-    <style>
-    </style>
-  </head>
-  <body>
-    <div id='app'></div>
-    <script type='text/babel'>
-      //https://www.acme-api.com/api/companies
-      //https://www.acme-api.com/api/companies/:id/companyProfits
-      const App = () => {
-        return (
-          <h1>Start Building</h1>
-        );
+<head>
+  <title>Acme Company Profits</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+  <style>
+  </style>
+</head>
+
+<body>
+  <div id='app'></div>
+  <script type='text/babel'>
+    //https://www.acme-api.com/api/companies
+    //https://www.acme-api.com/api/companies/:id/companyProfits
+    const App = () => {
+      const [companies, setCompanies] = React.useState([])
+      const [profit, setProfit] = React.useState([]) 
+
+      const loadCompanies = async () => {
+        const response = await fetch('https://www.acme-api.com/api/companies')
+        const json = await response.json()
+        setCompanies(json)
       }
 
-      let root = ReactDOM.createRoot(document.querySelector('#app'));
-      root.render(<App />);
-    </script>
-  </body>
+      const loadProfit = async () => {
+        const companyId = window.location.hash.slice(1)
+        if (companyId) {
+          const response = await fetch(`https://www.acme-api.com/api/companies/${companyId}/companyProfits`)
+          const json = await response.json()
+          setProfit(json)
+        }
+        else {
+          setProfit({})
+        }
+
+      }
+
+      React.useEffect(() => {
+        loadCompanies()
+        window.addEventListener('hashchange', loadProfit)
+
+      }, [])
+
+
+
+      return (
+        <div>
+          <h1>Start Building</h1>
+          <ul>
+            {
+              companies.map(company => {
+                return (
+                  <li key={company.id}>
+                    <a href={`#${company.id}`}>{company.name}
+                    </a>
+                  </li>
+
+                )
+              })
+            }
+
+          </ul>
+          <div>
+            {profit.map((value, key) => {
+              return (
+                  <div>
+                    <li>{Object.entries(value).map(([key, value]) => {
+                      return (<h4>{key} : {value}</h4>);
+                    })}
+                    </li>
+                  </div>
+                
+              )
+
+            })
+            }
+          </div>
+
+
+        </div>
+      );
+    }
+
+    let root = ReactDOM.createRoot(document.querySelector('#app'));
+    root.render(<App />);
+  </script>
+</body>
+
 </html>
